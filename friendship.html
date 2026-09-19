@@ -1,0 +1,1065 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Favourite Person Analyzer</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at top, #182848, #07111f 65%);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.app {
+    width: 100%;
+    max-width: 470px;
+    background: rgba(12, 22, 38, 0.96);
+    border: 1px solid rgba(0, 220, 255, 0.25);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.45),
+        0 0 40px rgba(0,190,255,.08);
+}
+
+/* TOP BAR */
+
+.topbar {
+    height: 58px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-weight: bold;
+}
+
+.logo-dot {
+    width: 10px;
+    height: 10px;
+    background: #00e5ff;
+    border-radius: 50%;
+    box-shadow: 0 0 15px #00e5ff;
+}
+
+.status {
+    font-size: 11px;
+    color: #69f0ae;
+}
+
+/* PAGES */
+
+.page {
+    padding: 32px 25px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* INTRO */
+
+.ai-icon {
+    width: 85px;
+    height: 85px;
+    margin: 5px auto 22px;
+    border-radius: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 42px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,229,255,.18),
+            rgba(124,77,255,.22)
+        );
+
+    border: 1px solid rgba(0,229,255,.3);
+
+    box-shadow:
+        0 0 30px rgba(0,229,255,.12);
+}
+
+h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #9eacbf;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 27px;
+}
+
+.badge {
+    width: fit-content;
+    margin: 0 auto 22px;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    color: #69f0ae;
+    border: 1px solid rgba(105,240,174,.25);
+    background: rgba(105,240,174,.06);
+}
+
+input {
+    width: 100%;
+    padding: 15px 16px;
+    margin-bottom: 12px;
+
+    border-radius: 12px;
+    border: 1px solid #26364d;
+
+    background: #0b1728;
+    color: white;
+
+    outline: none;
+    font-size: 15px;
+
+    transition: .2s;
+}
+
+input:focus {
+    border-color: #00e5ff;
+    box-shadow: 0 0 15px rgba(0,229,255,.08);
+}
+
+input::placeholder {
+    color: #718096;
+}
+
+.main-btn {
+    width: 100%;
+    padding: 16px;
+
+    border: none;
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00bcd4,
+            #536dfe
+        );
+
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+
+    cursor: pointer;
+
+    margin-top: 7px;
+
+    box-shadow:
+        0 10px 25px rgba(0,188,212,.15);
+
+    transition: .2s;
+}
+
+.main-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* SCANNER */
+
+.scan-header {
+    text-align: center;
+}
+
+.scan-header h1 {
+    font-size: 23px;
+}
+
+.scan-subtitle {
+    color: #718096;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.scanner-ring {
+    width: 150px;
+    height: 150px;
+
+    margin: 30px auto;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(0,229,255,.15);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+
+    box-shadow:
+        0 0 35px rgba(0,229,255,.08);
+}
+
+.scanner-ring::before {
+    content: "";
+    position: absolute;
+
+    inset: 12px;
+
+    border-radius: 50%;
+
+    border: 2px dashed rgba(0,229,255,.5);
+
+    animation: rotate 4s linear infinite;
+}
+
+.scanner-ring::after {
+    content: "";
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,229,255,.2),
+            transparent 70%
+        );
+
+    animation: pulse 1.5s infinite;
+}
+
+.scan-number {
+    position: relative;
+    z-index: 3;
+    font-size: 29px;
+    font-weight: bold;
+    color: #00e5ff;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    50% {
+        transform: scale(1.15);
+        opacity: .5;
+    }
+}
+
+/* PROGRESS */
+
+.progress-bg {
+    width: 100%;
+    height: 9px;
+    border-radius: 10px;
+    background: #111e31;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00e5ff,
+            #536dfe
+        );
+
+    transition: width .15s;
+}
+
+.stage {
+    text-align: center;
+    margin: 16px 0;
+    color: #b8c5d8;
+    font-size: 13px;
+}
+
+/* TERMINAL */
+
+.terminal {
+    margin-top: 22px;
+    background: #050b13;
+    border: 1px solid #172538;
+    border-radius: 12px;
+    padding: 14px;
+
+    height: 135px;
+    overflow: hidden;
+
+    font-family: monospace;
+    font-size: 11px;
+    color: #69f0ae;
+    text-align: left;
+}
+
+.terminal-line {
+    margin-bottom: 8px;
+}
+
+.terminal-line::before {
+    content: "> ";
+    color: #00e5ff;
+}
+
+/* RESULT */
+
+.result-icon {
+    text-align: center;
+    font-size: 65px;
+    margin-bottom: 10px;
+}
+
+.result-title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.result-subtitle {
+    text-align: center;
+    color: #9eacbf;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.result-box {
+    margin-top: 25px;
+    padding: 20px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,229,255,.06),
+            rgba(124,77,255,.08)
+        );
+
+    border: 1px solid rgba(0,229,255,.16);
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid rgba(255,255,255,.07);
+
+    font-size: 14px;
+}
+
+.result-row:last-child {
+    border-bottom: none;
+}
+
+.rank {
+    color: #00e5ff;
+    font-weight: bold;
+    text-align: right;
+    word-break: break-word;
+}
+
+.prank-box {
+    margin-top: 20px;
+    padding: 20px;
+
+    text-align: center;
+
+    border-radius: 16px;
+
+    background: rgba(255,193,7,.08);
+    border: 1px solid rgba(255,193,7,.25);
+}
+
+.prank-box h2 {
+    font-size: 24px;
+    margin-bottom: 9px;
+}
+
+.prank-box p {
+    color: #d1d8e2;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.footer {
+    text-align: center;
+    color: #536174;
+    font-size: 10px;
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+        <div class="logo">
+            <span class="logo-dot"></span>
+            AI Favourite Person Lab
+        </div>
+
+        <div class="status">
+            ● SYSTEM ONLINE
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         PAGE 1 - FORM
+         ========================= -->
+
+    <div id="formPage" class="page">
+
+        <div class="ai-icon">
+            🤖
+        </div>
+
+        <div class="badge">
+            AI FAVOURITE PERSON ANALYZER v3.7
+        </div>
+
+        <h1>
+            Discover Your<br>
+            Top 3 Favourite People
+        </h1>
+
+        <p class="subtitle">
+            Our AI analyzes your personal
+            preferences and identifies the
+            three people who are closest to you.
+        </p>
+
+
+        <input
+            id="senderName"
+            type="text"
+            maxlength="50"
+            placeholder="👤 Enter your name"
+        >
+
+
+        <input
+            id="friend1"
+            type="text"
+            maxlength="50"
+            placeholder="🥇 Your Favourite Person #1"
+        >
+
+
+        <input
+            id="friend2"
+            type="text"
+            maxlength="50"
+            placeholder="🥈 Your Favourite Person #2"
+        >
+
+
+        <input
+            id="friend3"
+            type="text"
+            maxlength="50"
+            placeholder="🥉 Your Favourite Person #3"
+        >
+
+
+        <button
+            class="main-btn"
+            onclick="startAnalysis()">
+
+            ⚡ START AI ANALYSIS
+
+        </button>
+
+
+        <div class="footer">
+            Personal Preference Intelligence Engine • Demo
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         PAGE 2 - SCANNER
+         ========================= -->
+
+    <div
+        id="scanPage"
+        class="page hidden"
+    >
+
+        <div class="scan-header">
+
+            <h1>
+                AI Analysis Running
+            </h1>
+
+            <div class="scan-subtitle">
+                Processing your favourite-person
+                profile...
+            </div>
+
+        </div>
+
+
+        <div class="scanner-ring">
+
+            <div
+                id="scanNumber"
+                class="scan-number">
+
+                0%
+
+            </div>
+
+        </div>
+
+
+        <div class="progress-bg">
+
+            <div
+                id="progressBar"
+                class="progress-bar">
+            </div>
+
+        </div>
+
+
+        <div
+            id="stage"
+            class="stage">
+
+            Initializing AI engine...
+
+        </div>
+
+
+        <div
+            id="terminal"
+            class="terminal">
+
+            <div class="terminal-line">
+                Initializing Favourite Person Intelligence...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         PAGE 3 - RESULT
+         ========================= -->
+
+    <div
+        id="resultPage"
+        class="page hidden"
+    >
+
+        <div class="result-icon">
+            🎯
+        </div>
+
+        <div class="result-title">
+            Analysis Complete
+        </div>
+
+        <div class="result-subtitle">
+            The AI has successfully identified
+            your top three favourite people.
+        </div>
+
+
+        <div class="result-box">
+
+            <div class="result-row">
+
+                <span>
+                    🥇 Favourite Person #1
+                </span>
+
+                <span
+                    id="result1"
+                    class="rank">
+                </span>
+
+            </div>
+
+
+            <div class="result-row">
+
+                <span>
+                    🥈 Favourite Person #2
+                </span>
+
+                <span
+                    id="result2"
+                    class="rank">
+                </span>
+
+            </div>
+
+
+            <div class="result-row">
+
+                <span>
+                    🥉 Favourite Person #3
+                </span>
+
+                <span
+                    id="result3"
+                    class="rank">
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="prank-box">
+
+            <h2>
+                😂 GOT YOU!
+            </h2>
+
+            <p>
+                There is absolutely no AI that can
+                magically detect your favourite people.
+                You just entered them yourself! 🤣
+            </p>
+
+        </div>
+
+
+        <div class="footer">
+            No actual AI was harmed during this analysis.
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+=================================================
+ GOOGLE APPS SCRIPT URL
+=================================================
+
+Replace the URL below with your Google Apps
+Script Web App URL.
+
+Example:
+
+https://script.google.com/macros/s/XXXXXXXX/exec
+*/
+
+const GOOGLE_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbzkstp6erJTF3_6llQnlXnKcu9BQMAyWiqf3s65ra6ZTkN3uKioYlQdzbZcUfx3qEl0dg/exec";
+
+
+/*
+=================================================
+ PAGE SWITCHING
+=================================================
+*/
+
+function showPage(id) {
+
+    document
+        .getElementById("formPage")
+        .classList
+        .add("hidden");
+
+    document
+        .getElementById("scanPage")
+        .classList
+        .add("hidden");
+
+    document
+        .getElementById("resultPage")
+        .classList
+        .add("hidden");
+
+    document
+        .getElementById(id)
+        .classList
+        .remove("hidden");
+}
+
+
+/*
+=================================================
+ START ANALYSIS
+=================================================
+*/
+
+function startAnalysis() {
+
+    const sender =
+        document
+        .getElementById("senderName")
+        .value
+        .trim();
+
+    const favourite1 =
+        document
+        .getElementById("friend1")
+        .value
+        .trim();
+
+    const favourite2 =
+        document
+        .getElementById("friend2")
+        .value
+        .trim();
+
+    const favourite3 =
+        document
+        .getElementById("friend3")
+        .value
+        .trim();
+
+
+    if (
+        !sender ||
+        !favourite1 ||
+        !favourite2 ||
+        !favourite3
+    ) {
+
+        alert(
+            "Please enter your name and all three favourite people 😂"
+        );
+
+        return;
+    }
+
+
+    /*
+    ----------------------------------------------
+    SEND DATA TO GOOGLE SHEETS
+    ----------------------------------------------
+    */
+
+    const data = {
+
+        senderName: sender,
+
+        friend1: favourite1,
+
+        friend2: favourite2,
+
+        friend3: favourite3
+
+    };
+
+
+    fetch(
+        GOOGLE_SCRIPT_URL,
+        {
+
+            method: "POST",
+
+            mode: "no-cors",
+
+            headers: {
+                "Content-Type":
+                    "text/plain;charset=utf-8"
+            },
+
+            body: JSON.stringify(data)
+
+        }
+    )
+    .catch(error => {
+
+        console.log(
+            "Submission error:",
+            error
+        );
+
+    });
+
+
+    /*
+    ----------------------------------------------
+    SHOW SCANNER
+    ----------------------------------------------
+    */
+
+    showPage("scanPage");
+
+    runScanner(
+        sender,
+        favourite1,
+        favourite2,
+        favourite3
+    );
+}
+
+
+/*
+=================================================
+FAKE AI SCANNER
+=================================================
+*/
+
+function runScanner(
+    sender,
+    favourite1,
+    favourite2,
+    favourite3
+) {
+
+    let progress = 0;
+
+    const scanNumber =
+        document
+        .getElementById("scanNumber");
+
+    const progressBar =
+        document
+        .getElementById("progressBar");
+
+    const stage =
+        document
+        .getElementById("stage");
+
+    const terminal =
+        document
+        .getElementById("terminal");
+
+
+    const stages = [
+
+        "Initializing preference intelligence engine...",
+
+        "Building personal relationship graph...",
+
+        "Analyzing preference patterns...",
+
+        "Calculating compatibility levels...",
+
+        "Detecting strongest connections...",
+
+        "Running social preference model...",
+
+        "Cross-checking preference probability...",
+
+        "Generating final ranking...",
+
+        "Finalizing AI prediction..."
+
+    ];
+
+
+    const terminalMessages = [
+
+        "Neural engine initialized.",
+
+        "Personal preference graph created.",
+
+        "Relationship nodes detected.",
+
+        "Connection strength calculated.",
+
+        "Preference probability model running.",
+
+        "High-confidence preference detected.",
+
+        "Ranking algorithm completed.",
+
+        "Preparing final results."
+
+    ];
+
+
+    let stageIndex = 0;
+
+
+    const interval =
+        setInterval(() => {
+
+            progress +=
+                Math.floor(
+                    Math.random() * 5
+                ) + 2;
+
+
+            if (progress > 100) {
+                progress = 100;
+            }
+
+
+            scanNumber.textContent =
+                progress + "%";
+
+
+            progressBar.style.width =
+                progress + "%";
+
+
+            const calculatedStage =
+                Math.floor(
+                    progress /
+                    (100 / stages.length)
+                );
+
+
+            if (
+                calculatedStage >
+                stageIndex
+            ) {
+
+                stageIndex =
+                    calculatedStage;
+
+
+                if (
+                    stageIndex <
+                    stages.length
+                ) {
+
+                    stage.textContent =
+                        stages[stageIndex];
+
+                }
+
+
+                if (
+                    stageIndex <
+                    terminalMessages.length
+                ) {
+
+                    const line =
+                        document.createElement(
+                            "div"
+                        );
+
+                    line.className =
+                        "terminal-line";
+
+                    line.textContent =
+                        terminalMessages[
+                            stageIndex
+                        ];
+
+                    terminal.appendChild(line);
+
+                    terminal.scrollTop =
+                        terminal.scrollHeight;
+
+                }
+
+            }
+
+
+            if (progress >= 100) {
+
+                clearInterval(interval);
+
+
+                stage.textContent =
+                    "Analysis completed successfully.";
+
+
+                setTimeout(() => {
+
+                    showResults(
+                        sender,
+                        favourite1,
+                        favourite2,
+                        favourite3
+                    );
+
+                }, 1200);
+
+            }
+
+
+        }, 220);
+}
+
+
+/*
+=================================================
+SHOW RESULTS
+=================================================
+*/
+
+function showResults(
+    sender,
+    favourite1,
+    favourite2,
+    favourite3
+) {
+
+    document
+        .getElementById("result1")
+        .textContent = favourite1;
+
+
+    document
+        .getElementById("result2")
+        .textContent = favourite2;
+
+
+    document
+        .getElementById("result3")
+        .textContent = favourite3;
+
+
+    showPage("resultPage");
+}
+
+</script>
+
+</body>
+</html>
+```
